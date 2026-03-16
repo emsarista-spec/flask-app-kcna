@@ -1,1 +1,2 @@
-terraform/.terraform/providers/registry.terraform.io/*
+.terraform/*
+.terraform.*
