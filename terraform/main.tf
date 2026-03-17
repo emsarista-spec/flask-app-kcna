@@ -15,6 +15,7 @@ resource "aws_vpc" "main" {
   cidr_block = "10.1.0.0/16"
   tags = {
     Name = "main-vpc"
+    app = "flask-test"
   }
 }
 
@@ -22,10 +23,18 @@ resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.1.0.0/16"
   map_public_ip_on_launch = true
+  tags = {
+    Name = "public-subnet"
+    app = "flask-test"
+  }
 }
 
 resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.main.id
+  tags = {
+    Name = "main-ig"
+    app = "flask-test"
+  }
 }
 
 resource "aws_route_table" "route_table" {
@@ -46,12 +55,20 @@ resource "aws_route_table" "route_table" {
     gateway_id = "local"
 
   }
+  tags {
+    Name = "main-route-table"
+    app = "flask-test"
+  }
 
 }
 
 resource "aws_route_table_association" "rta" {
   subnet_id      = aws_subnet.public_subnet.id
   route_table_id = aws_route_table.route_table.id
+  tags {
+    Name = "main-route-table-association"
+    app = "flask-test"
+  }
 }
 
 resource "aws_security_group" "allow_tls" {
@@ -61,6 +78,7 @@ resource "aws_security_group" "allow_tls" {
 
   tags = {
     Name = "allow_tls"
+    app = "flask-test"
   }
 }
 
@@ -71,6 +89,11 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https" {
   from_port         = 443
   ip_protocol       = "tcp"
   to_port           = 443
+
+  tags {
+    Name = "allow_https_ingress_rule"
+    app = "flask-test"
+  }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_http" {
@@ -80,6 +103,11 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
+
+  tags  {
+    Name = "allow_http_ingress_rule"
+    app = "flask-test"
+  }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
@@ -89,18 +117,33 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
   from_port         = 22
   ip_protocol       = "tcp"
   to_port           = 22
+
+  tags {
+    Name = "allow_ssh_ingress_rule"
+    app = "flask-test"
+  }
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
   security_group_id = aws_security_group.allow_tls.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
+
+  tags {
+    Name = "allow_all_traffic_ipv4_egress_rule"
+    app = "flask-test"
+  }
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
   security_group_id = aws_security_group.allow_tls.id
   cidr_ipv6         = "::/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
+
+  tags{
+    Name = "allow_all_traffic_ipv6_egress_rule"
+    app = "flask-test"
+  }
 }
 
 # create ec2
@@ -114,6 +157,7 @@ resource "aws_instance" "ec2" {
 
   tags = {
     Name = "flask-app-instance"
+    app = "flask-test"
   }
 
   user_data = file("${path.module}/user_data.sh")
