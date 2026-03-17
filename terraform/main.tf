@@ -2,18 +2,6 @@ provider "aws" {
   region = var.region
 }
 
-#For github actions 
-terraform {
-  backend "remote" {
-    # The name of your Terraform Cloud organization.
-    organization = "ea-local-org"
-## The name of the Terraform Cloud workspace to store Terraform state files in.
-    workspaces {
-        name = "example-workspace"
-    }
-  }
-}
-
 #vpc
 resource "aws_vpc" "main" {
   cidr_block = "10.1.0.0/16"
