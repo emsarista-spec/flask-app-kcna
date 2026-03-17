@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "flask-app-tfstate"
+    bucket = "flask-app-tfstate-598497819406-ap-southeast-2-an"
     key    = "terraform.tfstate"
     region = "ap-southeast-2"
   }
