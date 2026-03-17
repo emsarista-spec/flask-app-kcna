@@ -87,15 +87,6 @@ jobs:
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       run: terraform fmt -check
-
-    # Destroy all existing infrastructure managed by Terraform. This is a required step to ensure that the `terraform plan` step creates a speculative plan in Terraform Cloud instead of a local plan. Note: This step will not destroy infrastructure in Terraform Cloud if the `terraform destroy` command fails. If this step fails, you can manually destroy infrastructure in Terraform Cloud or run `terraform destroy` locally to ensure that the next `terraform plan` step creates a speculative plan in Terraform Cloud.
-    - name: Terraform Destroy
-      run: |
-        if [ -z "$(terraform state list 2>/dev/null)" ]; then
-          echo "No existing infrastructure to destroy. Skipping."
-        else
-          terraform destroy -auto-approve -input=false
-        fi
     
     # Generates an execution plan for Terraform
     - name: Terraform Plan
