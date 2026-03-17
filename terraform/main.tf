@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "flask-app-tfstate"
+    key    = "terraform.tfstate"
+    region = "ap-southeast-2"
+  }
+}
+
 provider "aws" {
   region = var.region
 }

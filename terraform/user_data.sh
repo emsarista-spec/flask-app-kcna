@@ -17,7 +17,7 @@ sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -subj "/C=US/ST=State/L=City/O=Org/CN=localhost"
 
 # Configure SSL virtual host
-sudo bash -c 'cat > /etc/apache2/sites-available/default-ssl.conf <<SSLCONF
+sudo tee /etc/apache2/sites-available/default-ssl.conf > /dev/null <<SSLCONF
 <VirtualHost *:443>
   ServerName localhost
   DocumentRoot /var/www/html
@@ -25,7 +25,7 @@ sudo bash -c 'cat > /etc/apache2/sites-available/default-ssl.conf <<SSLCONF
   SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt
   SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key
 </VirtualHost>
-SSLCONF'
+SSLCONF
 
 sudo a2ensite default-ssl
 sudo systemctl restart apache2
