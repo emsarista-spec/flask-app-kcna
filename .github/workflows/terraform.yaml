@@ -82,7 +82,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -reconfigure
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -95,10 +95,11 @@ jobs:
     # Check if there are deployed resources in the Terraform Cloud workspace, and if so, run `terraform destroy` to destroy those resources. This is necessary to prevent resource drift between pull request runs and main branch runs.
     - name: Terraform Destroy
       run: | 
-        if [ $(terraform state list | wc -l) -gt 0 ]; then
-           terraform destroy -auto-approve -input=false
+        RESOURCES=$(terraform state list 2>/dev/null | wc -l)
+        if [ "$RESOURCES" -gt 0 ]; then
+          terraform destroy -auto-approve -input=false
         else
-           echo "No resources to destroy."
+          echo "No resources to destroy."
         fi
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
