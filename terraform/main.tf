@@ -15,7 +15,7 @@ resource "aws_vpc" "main" {
   cidr_block = "10.1.0.0/16"
   tags = {
     Name = "main-vpc"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
   tags = {
     Name = "public-subnet"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -33,7 +33,7 @@ resource "aws_internet_gateway" "ig" {
   vpc_id = aws_vpc.main.id
   tags = {
     Name = "main-ig"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -57,7 +57,7 @@ resource "aws_route_table" "route_table" {
   }
   tags {
     Name = "main-route-table"
-    app = "flask-test"
+    app  = "flask-test"
   }
 
 }
@@ -67,7 +67,7 @@ resource "aws_route_table_association" "rta" {
   route_table_id = aws_route_table.route_table.id
   tags {
     Name = "main-route-table-association"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -78,7 +78,7 @@ resource "aws_security_group" "allow_tls" {
 
   tags = {
     Name = "allow_tls"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -92,7 +92,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_https" {
 
   tags {
     Name = "allow_https_ingress_rule"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -104,9 +104,9 @@ resource "aws_vpc_security_group_ingress_rule" "allow_http" {
   ip_protocol       = "tcp"
   to_port           = 80
 
-  tags  {
+  tags {
     Name = "allow_http_ingress_rule"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -120,7 +120,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_ssh" {
 
   tags {
     Name = "allow_ssh_ingress_rule"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -131,7 +131,7 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 
   tags {
     Name = "allow_all_traffic_ipv4_egress_rule"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -140,9 +140,9 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv6" {
   cidr_ipv6         = "::/0"
   ip_protocol       = "-1" # semantically equivalent to all ports
 
-  tags{
+  tags {
     Name = "allow_all_traffic_ipv6_egress_rule"
-    app = "flask-test"
+    app  = "flask-test"
   }
 }
 
@@ -157,7 +157,7 @@ resource "aws_instance" "ec2" {
 
   tags = {
     Name = "flask-app-instance"
-    app = "flask-test"
+    app  = "flask-test"
   }
 
   user_data = file("${path.module}/user_data.sh")
