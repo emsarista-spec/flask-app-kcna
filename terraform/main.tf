@@ -61,10 +61,7 @@ resource "aws_route_table" "route_table" {
 resource "aws_route_table_association" "rta" {
   subnet_id      = aws_subnet.public_subnet.id
   route_table_id = aws_route_table.route_table.id
-  tags {
-    Name = "main-route-table-association"
-    app  = "flask-test"
-  }
+
 }
 
 resource "aws_security_group" "allow_tls" {
